@@ -33,6 +33,7 @@ function MainPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [genre, setGenre] = useState("all");
 	const [price, setPrice] = useState(40);
+	const [hoverRating, setHoverRating] = useState(0);
 	const [cart, setCart] = useState([]);
 	const [isCartOpen, setIsCartOpen] = useState(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
@@ -136,12 +137,24 @@ function MainPage() {
 	};
 
 	const addToCart = (book) => {
+		const isAlreadyInCart = cart.some((item) => item.isbn === book.isbn);
+
+		if (isAlreadyInCart) {
+			alert("This book is already in your cart.");
+			return; // Stop the function if the book is a duplicate
+		}
+
+		// If it's not a duplicate, proceed as normal
 		const newCart = [...cart, book];
 		setCart(newCart);
 		localStorage.setItem("userCart", JSON.stringify(newCart));
 		setIsCartOpen(true);
 	};
-
+	const removeFromCart = (isbnToRemove) => {
+		const newCart = cart.filter((item) => item.isbn !== isbnToRemove);
+		setCart(newCart);
+		localStorage.setItem("userCart", JSON.stringify(newCart)); // Also update localStorage
+	};
 	const genres = [
 		"all",
 		"Fiction",
@@ -160,13 +173,14 @@ function MainPage() {
 				<VerificationModal
 					token={token}
 					onClose={() => setShowVerificationModal(false)}
-					onVerified={fetchProfile} // Re-fetch profile on success
+					onVerified={fetchProfile}
 				/>
 			)}
 			<MiniCart
 				cart={cart}
 				isOpen={isCartOpen}
 				onClose={() => setIsCartOpen(false)}
+				onRemove={removeFromCart}
 			/>
 			<header>
 				<h1>📚 Advanced Book Recommender</h1>
@@ -261,7 +275,12 @@ function MainPage() {
 										<p className="price-genre">
 											${book.price} | {book.genre}
 										</p>
-										<div className="rating-stars">
+										<div
+											className="rating-stars"
+											onMouseLeave={() =>
+												setHoverRating(0)
+											}
+										>
 											{[5, 4, 3, 2, 1].map((star) => (
 												<React.Fragment key={star}>
 													<input
@@ -290,15 +309,17 @@ function MainPage() {
 												</React.Fragment>
 											))}
 										</div>
-										<button
-											className="purchase-button"
+										<div
+											className="button"
 											onClick={(e) => {
 												e.stopPropagation();
 												addToCart(book);
 											}}
 										>
-											Add to Cart 🛒
-										</button>
+											<div className="box">B</div>
+											<div className="box">U</div>
+											<div className="box">Y</div>
+										</div>
 									</div>
 								</div>
 							))}
@@ -352,60 +373,62 @@ function App() {
 	};
 
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route
-					path="/"
-					element={
-						token ? (
-							<MainPage />
-						) : (
-							<AuthForm onLogin={handleLogin} />
-						)
-					}
-				/>
-				<Route
-					path="/my-ratings"
-					element={
-						token ? (
-							<MyRatings />
-						) : (
-							<AuthForm onLogin={handleLogin} />
-						)
-					}
-				/>
-				<Route
-					path="/admin"
-					element={
-						token ? (
-							<AdminPanel />
-						) : (
-							<AuthForm onLogin={handleLogin} />
-						)
-					}
-				/>
-				<Route
-					path="/cart"
-					element={
-						token ? (
-							<CartPage />
-						) : (
-							<AuthForm onLogin={handleLogin} />
-						)
-					}
-				/>
-				<Route
-					path="*"
-					element={
-						token ? (
-							<MainPage />
-						) : (
-							<AuthForm onLogin={handleLogin} />
-						)
-					}
-				/>
-			</Routes>
-		</BrowserRouter>
+		<div className="background-container">
+			<BrowserRouter>
+				<Routes>
+					<Route
+						path="/"
+						element={
+							token ? (
+								<MainPage />
+							) : (
+								<AuthForm onLogin={handleLogin} />
+							)
+						}
+					/>
+					<Route
+						path="/my-ratings"
+						element={
+							token ? (
+								<MyRatings />
+							) : (
+								<AuthForm onLogin={handleLogin} />
+							)
+						}
+					/>
+					<Route
+						path="/admin"
+						element={
+							token ? (
+								<AdminPanel />
+							) : (
+								<AuthForm onLogin={handleLogin} />
+							)
+						}
+					/>
+					<Route
+						path="/cart"
+						element={
+							token ? (
+								<CartPage />
+							) : (
+								<AuthForm onLogin={handleLogin} />
+							)
+						}
+					/>
+					<Route
+						path="*"
+						element={
+							token ? (
+								<MainPage />
+							) : (
+								<AuthForm onLogin={handleLogin} />
+							)
+						}
+					/>
+				</Routes>
+			</BrowserRouter>
+		</div>
 	);
 }
 

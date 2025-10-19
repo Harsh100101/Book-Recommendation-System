@@ -1,7 +1,7 @@
 import React from "react"; // Corrected: Removed duplicate import
 import { Link } from "react-router-dom";
 
-function MiniCart({ cart, isOpen, onClose }) {
+function MiniCart({ cart, isOpen, onClose, onRemove }) {
 	const subtotal = cart
 		.reduce((sum, book) => sum + (book.price || 0), 0)
 		.toFixed(2);
@@ -31,6 +31,12 @@ function MiniCart({ cart, isOpen, onClose }) {
 							<div className="mini-cart-item-details">
 								<h4>{item.title}</h4>
 								<p>${item.price}</p>
+								<button
+									className="remove-btn"
+									onClick={() => onRemove(item.isbn)}
+								>
+									&times;
+								</button>
 							</div>
 						</div>
 					))

@@ -232,6 +232,60 @@ def verify_otp():
         return jsonify(msg="Email verified successfully!"), 200
     return jsonify(msg="Invalid or expired OTP"), 400
 
+@app.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    email = request.get_json().get('email')
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        # Still send a success message to not reveal which emails are registered
+        return jsonify(msg="If this email is registered, a recovery OTP has been sent."), 200
+
+    otp = str(random.randint(100000, 999999))
+    # Store OTP with a key that includes email to distinguish from verification OTPs
+    otp_storage[f"reset_{user.username}"] = otp
+
+    # --- Email Sending Logic ---
+    sender_email = os.getenv("EMAIL_USER")
+    sender_password = os.getenv("EMAIL_PASS")
+    
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Your Password Reset Code"
+    message["From"] = sender_email
+    message["To"] = user.email
+    html = f"<html><body><p>Your password reset code is: <b>{otp}</b></p></body></html>"
+    message.attach(MIMEText(html, "html"))
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, user.email, message.as_string())
+        return jsonify(msg="If this email is registered, a recovery OTP has been sent."), 200
+    except Exception as e:
+        print(f"Email sending failed: {e}")
+        return jsonify(msg="Failed to send OTP."), 500
+
+
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    email = data.get('email')
+    otp = data.get('otp')
+    new_password = data.get('new_password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify(msg="Invalid request."), 400
+    
+    # Check if the OTP is correct
+    if f"reset_{user.username}" in otp_storage and otp_storage[f"reset_{user.username}"] == otp:
+        user.password_hash = generate_password_hash(new_password)
+        db.session.commit()
+        del otp_storage[f"reset_{user.username}"] # Clean up OTP
+        return jsonify(msg="Password updated successfully. Please log in."), 200
+    
+    return jsonify(msg="Invalid or expired OTP."), 400
 # --- 8. Main Block ---
 if __name__ == '__main__':
     app.run(debug=True)
