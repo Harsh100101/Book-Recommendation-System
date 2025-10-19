@@ -1,0 +1,510 @@
+/* --- Global Styles & Fonts --- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+
+:root {
+	--primary-bg: #1a1a1a;
+	--secondary-bg: #282828;
+	--text-primary: #e0e0e0;
+	--text-secondary: #aaaaaa;
+	--accent-primary: #a0b3c8; /* A subtle, elegant blue/grey */
+	--border-color: #444444;
+}
+
+body {
+	margin: 0;
+	font-family: "Inter", sans-serif;
+	background-color: var(--primary-bg);
+	color: var(--text-primary);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* --- Header & Navigation --- */
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem 2rem;
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 2rem;
+}
+
+header h1 {
+	font-family: "Playfair Display", serif;
+	font-size: 1.8rem;
+	margin: 0;
+	color: var(--text-primary);
+}
+
+header nav {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.nav-link {
+	color: var(--text-secondary);
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+	color: var(--accent-primary);
+}
+
+.logout-button {
+	padding: 8px 15px;
+	background-color: var(--secondary-bg);
+	color: var(--text-primary);
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+
+.logout-button:hover {
+	background-color: var(--border-color);
+}
+
+/* --- Filter Controls --- */
+.filters {
+	display: grid;
+	grid-template-columns: 2fr 1fr 2fr;
+	gap: 20px;
+	padding: 20px;
+	background-color: var(--secondary-bg);
+	border-radius: 8px;
+	margin-bottom: 30px;
+	align-items: center;
+}
+
+.search-input,
+.genre-select {
+	padding: 12px;
+	border-radius: 5px;
+	border: 1px solid var(--border-color);
+	background-color: var(--primary-bg);
+	color: var(--text-primary);
+	font-size: 1rem;
+}
+
+.price-slider {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.price-slider label {
+	white-space: nowrap;
+	color: var(--text-secondary);
+}
+
+.price-slider input[type="range"] {
+	width: 100%;
+	cursor: pointer;
+}
+
+/* --- Main Content Layout --- */
+.main-content {
+	display: grid;
+	grid-template-columns: 2.5fr 1fr;
+	gap: 30px;
+}
+
+.book-list-container,
+.recommendation-container {
+	background-color: var(--secondary-bg);
+	border-radius: 8px;
+	padding: 25px;
+	height: fit-content;
+}
+
+h2 {
+	font-family: "Playfair Display", serif;
+	border-bottom: 1px solid var(--border-color);
+	padding-bottom: 15px;
+	margin-top: 0;
+	margin-bottom: 25px;
+	font-size: 1.5rem;
+}
+
+/* --- Book Search Grid --- */
+.book-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 25px;
+	max-height: 75vh;
+	overflow-y: auto;
+	padding-right: 15px;
+}
+
+.book-card {
+	background-color: var(--primary-bg);
+	border-radius: 8px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.book-card img {
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
+}
+
+.book-card .book-info {
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.book-card h4 {
+	font-size: 1rem;
+	margin: 0 0 5px 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: var(--text-primary);
+}
+
+.book-card p {
+	font-size: 0.85rem;
+	color: var(--text-secondary);
+	margin: 0;
+	flex-grow: 1;
+}
+
+.price-genre {
+	font-weight: 500;
+	color: var(--accent-primary) !important;
+	margin-top: 8px !important;
+}
+/* Add or replace these styles in App.css */
+
+.rating-stars {
+	display: inline-block;
+	/* This reverses the star order to match the HTML */
+	unicode-bidi: bidi-override;
+	direction: rtl;
+	text-align: center;
+	margin-top: 8px;
+	padding: 5px 0;
+}
+
+.rating-stars input {
+	display: none; /* Hide the actual radio buttons */
+}
+
+.rating-stars label {
+	cursor: pointer;
+	color: #ccc; /* Default empty star color */
+	transition: color 0.2s;
+	font-size: 1.5rem;
+	padding: 0 2px;
+}
+
+.rating-stars label:before {
+	content: "\2605"; /* Unicode star character */
+}
+
+/* This handles the hover effect */
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+	color: #ffc107; /* Gold color on hover */
+	transition: color 0.2s;
+}
+
+/* This handles the clicked/checked state */
+.rating-stars input:checked ~ label {
+	color: #ffc107;
+}
+/* --- Recommendations Panel --- */
+.recommendation-container .placeholder-text {
+	text-align: center;
+	margin-top: 50px;
+	color: var(--text-secondary);
+}
+
+.rec-card {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	background-color: var(--primary-bg);
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.rec-card img {
+	width: 50px;
+	height: 75px;
+	object-fit: cover;
+	border-radius: 4px;
+	margin-right: 15px;
+}
+
+.rec-info {
+	flex-grow: 1;
+}
+.rec-card h4 {
+	margin: 0 0 5px 0;
+	font-size: 0.9rem;
+}
+.rec-card p {
+	margin: 0;
+	font-size: 0.8rem;
+	color: var(--text-secondary);
+}
+
+/* --- Purchase Button --- */
+.purchase-button {
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 10px;
+	padding: 8px 12px;
+	background-color: var(--accent-primary);
+	color: var(--primary-bg);
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 0.9rem;
+	border-radius: 5px;
+	text-align: center;
+	transition: background-color 0.2s;
+}
+
+.purchase-button:hover {
+	background-color: var(--text-primary);
+}
+
+.purchase-button.small {
+	width: auto;
+	padding: 5px 10px;
+	font-size: 0.8rem;
+	margin-top: 5px;
+}
+
+/* --- Auth & Other Pages (MyRatings, AdminPanel) --- */
+.auth-container,
+.my-ratings-page,
+.admin-panel-page {
+	max-width: 800px;
+	margin: 4rem auto;
+	padding: 2.5rem;
+	background-color: var(--secondary-bg);
+	border-radius: 10px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.form-container h2 {
+	font-family: "Playfair Display", serif;
+	text-align: center;
+	color: var(--text-primary);
+	margin-bottom: 2rem;
+	font-size: 2rem;
+}
+.add-book-form {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+}
+.add-book-form input,
+.add-book-form select,
+.auth-container input {
+	width: 100%;
+	padding: 12px;
+	border-radius: 5px;
+	border: 1px solid var(--border-color);
+	background-color: var(--primary-bg);
+	color: var(--text-primary);
+	font-size: 1rem;
+	box-sizing: border-box;
+}
+.add-book-form button,
+.auth-container button {
+	grid-column: 1 / -1;
+	padding: 12px;
+	border: none;
+	border-radius: 5px;
+	background-color: var(--accent-primary);
+	color: var(--primary-bg);
+	font-weight: bold;
+	font-size: 1rem;
+	cursor: pointer;
+}
+
+.ratings-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 30px;
+}
+.back-link {
+	color: var(--accent-primary);
+	text-decoration: none;
+	font-weight: bold;
+}
+.ratings-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 25px;
+}
+.rated-book-card {
+	background-color: var(--primary-bg);
+	border-radius: 8px;
+	overflow: hidden;
+}
+.user-rating {
+	font-size: 1.1rem !important;
+	color: #ffc107 !important;
+	font-weight: bold;
+	margin-top: 10px !important;
+}
+/* Add these styles to the end of App.css */
+
+.cart-page {
+	max-width: 1200px;
+	margin: 2rem auto;
+	padding: 20px;
+}
+
+.cart-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 30px;
+	padding-bottom: 20px;
+}
+
+.cart-header h1 {
+	font-family: "Playfair Display", serif;
+	margin: 0;
+}
+
+.cart-contents {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 30px;
+}
+
+.cart-item-row {
+	display: grid;
+	grid-template-columns: 100px 1fr auto auto;
+	gap: 20px;
+	align-items: center;
+	padding: 15px 0;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.cart-item-row img {
+	width: 80px;
+	height: 120px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.item-details h4 {
+	margin: 0 0 5px 0;
+	font-size: 1.1rem;
+}
+
+.item-details p {
+	margin: 0;
+	color: var(--text-secondary);
+}
+
+.item-price {
+	font-size: 1.1rem;
+	font-weight: 500;
+	text-align: right;
+}
+
+.item-action {
+	text-align: right;
+}
+
+.cart-summary {
+	background-color: var(--secondary-bg);
+	border-radius: 8px;
+	padding: 25px;
+	height: fit-content;
+}
+
+.cart-summary h2 {
+	font-family: "Playfair Display", serif;
+	margin-top: 0;
+}
+
+.summary-row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15px;
+	font-size: 1rem;
+}
+
+.summary-row.total {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px solid var(--border-color);
+}
+/* Add these styles to the end of App.css */
+
+.average-rating {
+	font-size: 0.9rem;
+	font-weight: bold;
+	margin: 8px 0;
+	color: #ffc107; /* Gold color for average rating */
+}
+
+.rating-count {
+	font-size: 0.8rem;
+	font-weight: normal;
+	color: var(--text-secondary);
+	margin-left: 8px;
+}
+
+/* --- Interactive Star Styles --- */
+.rating-stars {
+	display: flex;
+	justify-content: center;
+	margin-top: 8px;
+	padding: 5px 0;
+}
+
+.rating-stars span {
+	font-size: 1.5rem;
+	cursor: pointer;
+	transition: transform 0.1s, color 0.1s;
+}
+
+.star-empty {
+	color: var(--border-color);
+}
+
+.star-filled {
+	color: #ffc107;
+}
+
+.rating-stars span:hover {
+	transform: scale(1.3);
+}
