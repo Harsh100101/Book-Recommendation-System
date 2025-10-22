@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# frontend/.env
+REACT_APP_API_URL=http://172.24.244.130:5000

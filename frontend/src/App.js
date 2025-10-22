@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import AuthForm from "./AuthForm";
 import MyRatings from "./MyRatings";
+import ProfilePage from "./ProfilePage";
 import AdminPanel from "./AdminPanel";
 import MiniCart from "./MiniCart";
 import CartPage from "./CartPage";
@@ -33,7 +34,7 @@ function MainPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [genre, setGenre] = useState("all");
 	const [price, setPrice] = useState(40);
-	const [hoverRating, setHoverRating] = useState(0);
+	// const [hoverRating, setHoverRating] = useState(0);
 	const [cart, setCart] = useState([]);
 	const [isCartOpen, setIsCartOpen] = useState(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
@@ -63,7 +64,7 @@ function MainPage() {
 					"Welcome back! We see you have items from your last session. Would you like to review them?"
 				)
 			) {
-				// In a real app, you might redirect to a /journal page here
+				// Journal prompt action
 			}
 			localStorage.removeItem("userCart");
 		}
@@ -73,7 +74,6 @@ function MainPage() {
 		localStorage.removeItem("token");
 		window.location.reload();
 	};
-
 	const rateBook = async (title, rating) => {
 		if (profile && !profile.is_verified) {
 			setShowVerificationModal(true);
@@ -83,6 +83,8 @@ function MainPage() {
 			alert("Please log in to rate a book.");
 			return;
 		}
+
+		// 1. Submit the rating to the database
 		await fetch("http://127.0.0.1:5000/rate", {
 			method: "POST",
 			headers: {
@@ -91,7 +93,13 @@ function MainPage() {
 			},
 			body: JSON.stringify({ title, rating }),
 		});
-		fetchBooks(); // Refresh books to show the new rating
+
+		// 2. Refresh the visible book list
+		fetchBooks();
+
+		// 3. Force a complete profile refresh
+		// This is needed because the ProfilePage needs the updated count from the DB.
+		fetchProfile();
 	};
 
 	const fetchBooks = useCallback(() => {
@@ -104,7 +112,7 @@ function MainPage() {
 		fetch(url, { headers })
 			.then((res) => res.json())
 			.then((data) => {
-				setBooks(data);
+				setBooks(Array.isArray(data) ? data : []);
 				setLoadingBooks(false);
 			})
 			.catch((error) => {
@@ -127,7 +135,7 @@ function MainPage() {
 		)
 			.then((res) => res.json())
 			.then((data) => {
-				setRecommendations(data);
+				setRecommendations(Array.isArray(data) ? data : []);
 				setLoadingRecs(false);
 			})
 			.catch((error) => {
@@ -138,23 +146,22 @@ function MainPage() {
 
 	const addToCart = (book) => {
 		const isAlreadyInCart = cart.some((item) => item.isbn === book.isbn);
-
 		if (isAlreadyInCart) {
 			alert("This book is already in your cart.");
-			return; // Stop the function if the book is a duplicate
+			return;
 		}
-
-		// If it's not a duplicate, proceed as normal
 		const newCart = [...cart, book];
 		setCart(newCart);
 		localStorage.setItem("userCart", JSON.stringify(newCart));
 		setIsCartOpen(true);
 	};
+
 	const removeFromCart = (isbnToRemove) => {
 		const newCart = cart.filter((item) => item.isbn !== isbnToRemove);
 		setCart(newCart);
-		localStorage.setItem("userCart", JSON.stringify(newCart)); // Also update localStorage
+		localStorage.setItem("userCart", JSON.stringify(newCart));
 	};
+
 	const genres = [
 		"all",
 		"Fiction",
@@ -190,6 +197,11 @@ function MainPage() {
 							Admin Panel
 						</Link>
 					)}
+					{/* --- ADDED PROFILE LINK --- */}
+					<Link to="/profile" className="nav-link">
+						Account
+					</Link>
+					{/* --- END ADDED LINK --- */}
 					<Link to="/my-ratings" className="nav-link">
 						My Ratings
 					</Link>
@@ -275,12 +287,7 @@ function MainPage() {
 										<p className="price-genre">
 											${book.price} | {book.genre}
 										</p>
-										<div
-											className="rating-stars"
-											onMouseLeave={() =>
-												setHoverRating(0)
-											}
-										>
+										<div className="rating-stars">
 											{[5, 4, 3, 2, 1].map((star) => (
 												<React.Fragment key={star}>
 													<input
@@ -391,6 +398,16 @@ function App() {
 						element={
 							token ? (
 								<MyRatings />
+							) : (
+								<AuthForm onLogin={handleLogin} />
+							)
+						}
+					/>
+					<Route
+						path="/profile"
+						element={
+							token ? (
+								<ProfilePage />
 							) : (
 								<AuthForm onLogin={handleLogin} />
 							)

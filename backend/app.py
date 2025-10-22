@@ -14,6 +14,11 @@ from flask_migrate import Migrate
 from sqlalchemy import func
 from functools import wraps
 from dotenv import load_dotenv
+import re # New: Import th regex module
+from datetime import datetime
+from werkzeug.utils import secure_filename
+import time
+from supabase import create_client, Client # <-- NEW IMPORT
 
 load_dotenv()
 import os
@@ -27,6 +32,12 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+
+# Initialize Supabase Client for Storage
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 # --- 2. Initialize Extensions ---
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -48,6 +59,8 @@ class User(db.Model):
     is_verified = db.Column(db.Boolean, default=False, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
     ratings = db.relationship('Rating', backref='user', lazy=True, cascade="all, delete-orphan")
+    profile_photo_url = db.Column(db.Text, default='https://via.placeholder.com/150/444/999?text=U') 
+    reviews = db.relationship('Review', backref='user', lazy='dynamic') # Tracks all reviews by this user
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +68,13 @@ class Rating(db.Model):
     book_title = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    book_title = db.Column(db.Text, nullable=False)
+    description_text = db.Column(db.Text, nullable=False) # The user's detailed description
+    is_approved = db.Column(db.Boolean, default=False, nullable=False) # <-- MODERATION FLAG
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow) # For sorting/display
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     isbn = db.Column(db.String(40), unique=True, nullable=False)
@@ -66,6 +86,7 @@ class Book(db.Model):
     genre = db.Column(db.String(100))
     price = db.Column(db.Float)
 
+otp_storage = {}
 # --- 6. Custom Decorators & Helper Functions ---
 def admin_required():
     def wrapper(fn):
@@ -103,13 +124,22 @@ def recommend(book_isbn):
             recs.extend(genre_recs)
         return [{"title": b.title, "author": b.author, "image": b.image_url_m.replace("http://", "https://") if b.image_url_m else "", "genre": b.genre, "price": b.price, "isbn": b.isbn} for b in recs]
 
+PASSWORD_REGEX = re.compile(r"^(?=.*[0-9])(?=.*[^A-Za-z0-9]).{6,}$")
+
 # --- 7. API Endpoints ---
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     username, password, email = data.get('username'), data.get('password'), data.get('email')
+    
     if not all([username, password, email]): return jsonify({"msg": "Username, password, and email are required"}), 400
+    
+    # NEW: Server-side validation of password requirements
+    if not PASSWORD_REGEX.match(password):
+        return jsonify({"msg": "Password must be at least 6 characters, contain 1 digit, and 1 special character."}), 400
+    
     if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first(): return jsonify({"msg": "Username or email already exists"}), 400
+    
     new_user = User(username=username, email=email, password_hash=generate_password_hash(password))
     db.session.add(new_user)
     db.session.commit()
@@ -125,13 +155,6 @@ def login():
         return jsonify(access_token=access_token)
     return jsonify({"msg": "Bad username or password"}), 401
 
-@app.route('/profile', methods=['GET'])
-@jwt_required()
-def get_profile():
-    current_user_username = get_jwt_identity()
-    user = User.query.filter_by(username=current_user_username).first()
-    if not user: return jsonify(msg="User not found"), 404
-    return jsonify(username=user.username, is_admin=user.is_admin, is_verified=user.is_verified)
 
 @app.route('/search', methods=['GET'])
 @jwt_required(optional=True)
@@ -153,6 +176,65 @@ def search_books():
     filtered_books = query.limit(100).all()
     results = [{"title": b.title, "author": b.author, "image": b.image_url_m.replace("http://", "https://") if b.image_url_m else "", "genre": b.genre, "price": b.price, "isbn": b.isbn, "average_rating": round(avg, 1) if avg else 0, "rating_count": count, "user_rating": user_ratings_map.get(b.title, 0)} for b, avg, count in filtered_books]
     return jsonify(results)
+# In backend/app.py, replace the entire upload_profile_photo function
+
+@app.route('/upload-profile-photo', methods=['POST'])
+@jwt_required()
+def upload_profile_photo():
+    current_user_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_user_username).first()
+
+    # CRITICAL: We look for the file under the key 'file' from the frontend FormData
+    if 'file' not in request.files:
+        return jsonify(msg="No file part in the request."), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify(msg="No selected file."), 400
+    
+    if file:
+        # Generate a unique filename (e.g., user_123_timestamp.jpg)
+        filename = secure_filename(f"user_{user.id}_{int(time.time())}.{file.filename.rsplit('.', 1)[1].lower()}")
+        bucket_name = "Profile Photo" # Your specified bucket name
+        file_path = f"{user.username}/{filename}" # Path within the bucket
+
+        try:
+            # 1. Read file data into memory
+            file_data = file.read()
+            
+            # 2. Upload to Supabase Storage
+            supabase.storage.from_(bucket_name).upload(
+                file=file_data, 
+                path=file_path,
+                file_options={"content-type": file.mimetype} 
+            )
+            
+            # 3. Get the public URL
+            # The URL is constructed using the base project URL and the path
+            public_url = f"{SUPABASE_URL}/storage/v1/object/public/{bucket_name}/{file_path}"
+
+            # 4. Save the permanent public URL to the database
+            user.profile_photo_url = public_url
+            db.session.commit()
+
+            return jsonify(msg="Photo updated and saved successfully.", profile_photo_url=public_url), 200
+
+        except Exception as e:
+            print(f"SUPABASE UPLOAD FAILED: {e}")
+            return jsonify(msg=f"Failed to upload to cloud storage. Check policies."), 500
+
+        # 2. Get the public URL for the image
+        # Assuming your bucket policy allows public access for reading.
+        # This URL is what is saved in the database.
+        
+        # --- IMPORTANT: Get the public URL based on Supabase Project URL ---
+        public_url = f"{SUPABASE_URL}/storage/v1/object/public/{bucket_name}/{file_path}"
+        
+        # 3. Update the database with the new permanent URL
+        user.profile_photo_url = public_url
+        db.session.commit()
+
+        return jsonify(msg="Photo updated successfully.", profile_photo_url=public_url), 200
 
 @app.route('/rate', methods=['POST'])
 @jwt_required()
@@ -179,6 +261,85 @@ def get_my_ratings():
         book_info = Book.query.filter_by(title=r.book_title).first()
         if book_info: rated_books_details.append({"title": r.book_title, "author": book_info.author, "image": book_info.image_url_m.replace("http://", "https://") if book_info.image_url_m else "", "isbn": book_info.isbn, "user_rating": r.rating})
     return jsonify(rated_books_details)
+@app.route('/submit-review', methods=['POST'])
+@jwt_required()
+def submit_review():
+    current_user_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_user_username).first()
+    data = request.get_json()
+    title, description = data.get('title'), data.get('description')
+
+    if not title or not description:
+        return jsonify(msg="Book title and review description are required."), 400
+
+    # Create new review record with approval flag set to FALSE
+    new_review = Review(
+        user_id=user.id,
+        book_title=title,
+        description_text=description,
+        is_approved=False
+    )
+    db.session.add(new_review)
+    db.session.commit()
+    return jsonify(msg="Review submitted for admin approval."), 200
+
+@app.route('/reviews/<string:book_title>', methods=['GET'])
+def get_approved_reviews(book_title):
+    # This endpoint fetches reviews that have been approved by an admin
+    approved_reviews = Review.query.filter(
+        Review.book_title == book_title,
+        Review.is_approved == True
+    ).all()
+    
+    # We must also fetch the username of the person who wrote the review
+    results = []
+    for review in approved_reviews:
+        results.append({
+            'username': review.user.username,
+            'description': review.description_text,
+            'timestamp': review.timestamp.isoformat()
+        })
+        
+    return jsonify(results)
+@app.route('/user-stats', methods=['GET'])
+@jwt_required()
+def get_user_stats():
+    current_user_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_user_username).first()
+
+    if not user:
+        return jsonify(msg="User not found."), 404
+
+    # --- CORRECTED: Query the Rating table for the count ---
+    total_reviews = Rating.query.filter_by(user_id=user.id).count() 
+    
+    # We can also simplify the name since it's the count of ratings
+    total_ratings_count = total_reviews # Renaming for clarity in the response
+    
+    total_books_renewed = 0 
+    
+    return jsonify({
+        # Ensure key names match what the frontend expects
+        'total_ratings': total_ratings_count, 
+        'total_books_renewed': total_books_renewed
+    }), 200
+    
+# You must also update the /profile endpoint to return the new URL:
+@app.route('/profile', methods=['GET'])
+@jwt_required()
+def get_profile():
+    current_user_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_user_username).first()
+    if not user: 
+        return jsonify(msg="User not found"), 404
+    # Include 'email' in the response
+    return jsonify(
+        username=user.username, 
+        email=user.email,  # Add this line
+        is_admin=user.is_admin, 
+        is_verified=user.is_verified, 
+        profile_photo_url=user.profile_photo_url
+    )
 
 @app.route('/recommend', methods=['GET'])
 def get_recommendations():
@@ -278,6 +439,12 @@ def reset_password():
     if not user:
         return jsonify(msg="Invalid request."), 400
     
+    if not PASSWORD_REGEX.match(new_password):
+        return jsonify({"msg": "New password must be at least 6 characters, contain 1 digit, and 1 special character."}), 400
+
+    # NEW: Password History Check (Is the new password the same as the old one?)
+    if check_password_hash(user.password_hash, new_password):
+        return jsonify(msg="The new password cannot be the same as your current password."), 400
     # Check if the OTP is correct
     if f"reset_{user.username}" in otp_storage and otp_storage[f"reset_{user.username}"] == otp:
         user.password_hash = generate_password_hash(new_password)
@@ -286,6 +453,27 @@ def reset_password():
         return jsonify(msg="Password updated successfully. Please log in."), 200
     
     return jsonify(msg="Invalid or expired OTP."), 400
+@app.route('/update-password', methods=['POST'])
+@jwt_required()
+def update_password():
+    current_user_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_user_username).first()
+    data = request.get_json()
+    new_password = data.get('new_password')
+    
+    # Check for password complexity (using the same regex)
+    if not PASSWORD_REGEX.match(new_password):
+        return jsonify({"msg": "Password must be at least 6 characters, contain 1 digit, and 1 special character."}), 400
+
+    # Password History Check (Cannot be the same as the current password)
+    if check_password_hash(user.password_hash, new_password):
+        return jsonify(msg="The new password cannot be the same as your current password."), 400
+
+    # Update and commit the new password hash
+    user.password_hash = generate_password_hash(new_password)
+    db.session.commit()
+    
+    return jsonify(msg="Password updated successfully. Please log in again."), 200
 # --- 8. Main Block ---
 if __name__ == '__main__':
     app.run(debug=True)
