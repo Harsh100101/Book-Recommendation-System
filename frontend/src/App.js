@@ -190,7 +190,12 @@ function MainPage() {
 				onRemove={removeFromCart}
 			/>
 			<header>
-				<h1>📚 Advanced Book Recommender</h1>
+				<img
+					src="/logo main.png"
+					alt="Main Logo"
+					className="header-logo-image"
+				></img>{" "}
+				<h1>The Next Read</h1>
 				<nav>
 					{profile && profile.is_admin && (
 						<Link to="/admin" className="nav-link">

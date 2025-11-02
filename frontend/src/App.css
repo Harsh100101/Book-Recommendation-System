@@ -28,12 +28,37 @@ body {
 
 /* --- Header & Navigation --- */
 header {
+	background-color: #1a1a1a;
+	padding: 0.5rem 2rem;
+	display: flex; /* <-- ADD THIS */
+	align-items: center; /* <-- ADD THIS: Vertically centers items */
+	justify-content: space-between; /* <-- ADD THIS: Pushes nav to the right */
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+.main-title-text {
+	color: #e0e0e0; /* Or your preferred text color */
+	font-size: 1.8rem; /* Adjust as needed */
+	font-weight: bold;
+	margin-left: 15px; /* Space between logo and text */
+	margin-right: auto; /* Pushes other items to the right */
+}
+
+/* Ensure your existing header-logo-image style is there */
+.header-logo-image {
+	height: 100px; /* Adjust this height */
+	width: auto;
+	display: block; /* Ensure it behaves as a block element within flex */
+}
+
+/* The .logo-link might also need display: flex to wrap both */
+.logo-link {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	padding: 1rem 2rem;
-	border-bottom: 1px solid var(--border-color);
-	margin-bottom: 2rem;
+	text-decoration: none; /* Remove underline if Link has one */
+	color: inherit; /* Inherit color from parent */
 }
 
 header h1 {
