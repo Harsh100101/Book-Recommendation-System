@@ -1,55 +1,52 @@
-📚 The Next Read – Intelligent Book Recommendation System
+# 📚 The Next Read – Intelligent Book Recommendation System
 
-The Next Read is a full-stack AI-powered book recommendation platform built using React, Flask, PostgreSQL, and Supabase Storage.
-It offers personalized book suggestions using hybrid recommendation logic, secure user authentication, OTP verification, ratings, reviews, admin book management, and a smooth UI experience.
+**The Next Read** is a full-stack **AI-powered book recommendation platform** built using **React, Flask, PostgreSQL, and Supabase Storage**. It provides personalized book suggestions through a hybrid recommendation engine, secure authentication, OTP verification, rating and review features, and a clean user experience.
 
-🚀 Features
-👤 User Features
+---
 
-Register/Login using JWT Authentication
+## 🚀 Features
 
-OTP-based Email Verification
+### 👤 User Features
 
-Search & Filter Books
+* Register/Login using JWT Authentication
+* OTP-based Email Verification
+* Search & Filter Books
+* View Personalized Recommendations
+* Add Books to Cart
+* Rate & Review Books
+* Reset Password using OTP
+* Update Profile + Upload Profile Photo
 
-View Personalized Recommendations
+### 🛠 Admin Features
 
-Add Books to Cart
+* Add New Books
+* Manage Dashboard
+* Moderate Reviews
 
-Rate & Review Books
+### 🤖 AI / ML Features
 
-Reset Password using OTP
+* Collaborative Filtering using pivot table & similarity matrix
+* Content-based fallback using author/genre
+* Hybrid recommendation pipeline
 
-Update Profile + Upload Profile Photo
+---
 
-🛠 Admin Features
+## 🏗 Tech Stack
 
-Add New Books
+* **Frontend:** React.js, Tailwind/Custom CSS
+* **Backend:** Flask (Python), Flask-JWT, Flask-Migrate
+* **Database:** PostgreSQL (Supabase)
+* **Authentication:** JWT
+* **Storage:** Supabase Storage
+* **Machine Learning:** Pandas, NumPy, Pickle Models
+* **Tools:** Postman, JMeter
+* **Version Control:** GitHub
 
-Manage Dashboard
+---
 
-Moderate Reviews
+## 📁 Folder Structure
 
-🤖 AI / ML Features
-
-Collaborative Filtering using pivot table & similarity matrix
-
-Content-based fallback using author/genre
-
-Hybrid recommendation pipeline
-
-🏗 Tech Stack
-
-Frontend: React.js, Tailwind/Custom CSS
-Backend: Flask (Python), Flask-JWT, Flask-Migrate
-Database: PostgreSQL (Supabase)
-Authentication: JWT
-Storage: Supabase Storage
-Machine Learning: Pandas, NumPy, Pickle Models
-Tools: Postman, JMeter (Performance Testing)
-Version Control: GitHub
-
-📁 Folder Structure
+```
 root/
 │── backend/
 │    ├── app.py
@@ -66,93 +63,133 @@ root/
 │    └── ...
 │
 └── README.md
+```
 
-⚙️ Backend Setup
-1️⃣ Create Virtual Environment
+---
+
+## ⚙️ Backend Setup
+
+### 1️⃣ Create Virtual Environment
+
+```
 cd backend
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-2️⃣ Add .env File
+### 2️⃣ Add .env File
+
+```
 DATABASE_URL=postgresql+psycopg2://xxxxxxxx
 JWT_SECRET_KEY=your_secret
 SUPABASE_URL=https://xyz.supabase.co
 SUPABASE_KEY=service_role_or_anon_key
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
+```
 
-3️⃣ Run Migrations
-flask db init   # only first time
+### 3️⃣ Run Migrations
+
+```
+flask db init
 flask db migrate -m "initial tables"
 flask db upgrade
+```
 
-4️⃣ Start Backend
+### 4️⃣ Start Backend
+
+```
 python app.py
+```
 
-🌐 Frontend Setup
+---
+
+## 🌐 Frontend Setup
+
+```
 cd frontend
 npm install
 npm start
+```
 
-🔌 API Endpoints Overview
-Endpoint	Method	Description
-/register	POST	User Registration
-/login	POST	Login (JWT)
-/send-verification-otp	POST	OTP Email
-/verify-otp	POST	Verify OTP
-/search	GET	Search + Filter
-/rate	POST	Rate a Book
-/recommend	GET	Recommendation System
-/upload-profile-photo	POST	Profile Image Upload (Supabase)
-/admin/add-book	POST	Admin Add Book
-🖼 Screenshots
-⭐ Main Home Page
+---
 
-⭐ Admin Panel
+## 🔌 API Endpoints Overview
 
-⭐ OTP Verification
+| Endpoint                 | Method | Description                             |
+| ------------------------ | ------ | --------------------------------------- |
+| `/register`              | POST   | User Registration                       |
+| `/login`                 | POST   | Login using JWT                         |
+| `/send-verification-otp` | POST   | Send OTP to email                       |
+| `/verify-otp`            | POST   | Verify OTP                              |
+| `/search`                | GET    | Search + Filter Books                   |
+| `/rate`                  | POST   | Rate a Book                             |
+| `/recommend`             | GET    | Recommendation System                   |
+| `/upload-profile-photo`  | POST   | Upload profile photo (Supabase Storage) |
+| `/admin/add-book`        | POST   | Add new book (Admin only)               |
 
-(Replace the image paths with your GitHub image URLs)
+---
 
-🧩 System Architecture Diagrams
-🔹 User Authentication Flow
+## 🖼 Screenshots
 
-🔹 Recommendation Engine Flow
+### ⭐ Main Home Page
 
-🔹 Rating + OTP Verification Flow
+<img width="1903" height="987" alt="Screenshot 2025-11-05 144316" src="https://github.com/user-attachments/assets/5b134940-f09a-4444-8090-38cf45fc1a7e" />
 
-🔹 Frontend → Backend → Database Flow
+### ⭐ Admin Panel
 
-🔹 User Access Diagram
+<img width="1282" height="717" alt="Screenshot 2025-11-05 145431" src="https://github.com/user-attachments/assets/5e4715fc-26a1-486e-aa65-996a2f9eddc5" />
 
-📊 Performance Testing (JMeter)
+### ⭐ OTP Verification
 
-Load Testing Performed Using Apache JMeter:
+<img width="804" height="532" alt="Screenshot 2025-11-05 151605" src="https://github.com/user-attachments/assets/6eca0a36-2816-41b2-9bd5-5fdebc01c948" />
 
-Concurrent 50/100/200 users
+---
 
-Monitored API response time, throughput
+## 🧩 System Architecture Diagrams
 
-Backend stable under load
+* User Authentication Flow
+* Recommendation Engine Flow
+* Rating + OTP Verification Flow
+* Frontend → Backend → Database Flow
+* User Access Diagram
 
-Login + Search API optimized with indexes
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/6ac3184c-6585-4f9e-ad6e-0b99c1f6dfcd" />
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/65fa988a-1d8e-47a3-9448-23d82d7731d9" />
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/d0ead24a-4d7d-4156-89ae-3221dde5593a" />
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/ea2143f6-f0ec-427c-8e5d-b478efcbb88d" />
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/16e60f2e-2c26-48dd-bee5-342d2aa65045" />
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/0e289d6a-38b3-4bac-b16d-074ae7c64e40" />
+<img width="947" height="1454" alt="image" src="https://github.com/user-attachments/assets/1f1aa6e1-f5dc-4745-9830-1a9b6a7de2a6" />
 
-🔮 Future Enhancements
 
-AI-powered NLP Review Analysis
+---
 
-Voice-based book search
+## 📊 Performance Testing (JMeter)
 
-User reading history + personalized dashboard
+Load testing performed using Apache JMeter:
 
-Social sharing of book lists
+* Concurrent 50/100/200 users
+* Monitored API response time & throughput
+* Backend remained stable under load
+* Optimized search & login queries with DB indexing
 
-In-app recommendation analytics
+---
 
-Auto-moderation for reviews
+## 🔮 Future Enhancements
 
-🏁 Conclusion
+* AI-powered NLP Review Analysis
+* Voice-based book search
+* Personalized reading dashboard
+* Social sharing of book lists
+* In-app recommendation analytics
+* Automated review moderation
 
-The Next Read successfully integrates AI, Web Technologies, and Cloud Infrastructure into a seamless recommendation platform.
-Its hybrid ML engine, modern UI, strong security, and scalable backend make it a robust system ready for real-world deployment.
+---
+
+## 🏁 Conclusion
+
+**The Next Read** integrates AI, modern web technologies, and cloud architecture to deliver a personalized and scalable book recommendation experience. Its hybrid ML engine, secure backend, and user-friendly frontend make it a robust platform ready for deployment.
+
+---
