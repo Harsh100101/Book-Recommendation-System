@@ -1,113 +1,158 @@
-# 📚 Next Read – AI-Powered Book Recommendation System
+📚 The Next Read – Intelligent Book Recommendation System
 
-> *“The only way to do great work is to love what you do.” – Steve Jobs*
+The Next Read is a full-stack AI-powered book recommendation platform built using React, Flask, PostgreSQL, and Supabase Storage.
+It offers personalized book suggestions using hybrid recommendation logic, secure user authentication, OTP verification, ratings, reviews, admin book management, and a smooth UI experience.
 
-Next Read is an **AI-powered book recommendation platform** that helps users discover books based on their interests, ratings, and reading preferences. Built using **React.js (Frontend)**, **Flask (Backend)**, and **PostgreSQL (Database)**, the system provides personalized suggestions using a **hybrid recommendation model** combining content-based and collaborative filtering.
+🚀 Features
+👤 User Features
 
----
+Register/Login using JWT Authentication
 
-## 🚀 Features
+OTP-based Email Verification
 
-* 🔍 Smart AI-based book recommendations
-* 🔐 Secure JWT authentication & OTP email verification
-* 📸 Profile photo upload using Supabase Storage
-* ⭐ User ratings, reviews, and dashboard statistics
-* 🎨 Modern, responsive UI built with React.js
-* 🛠️ Admin panel for moderation and book management
+Search & Filter Books
 
----
+View Personalized Recommendations
 
-## 🏗️ Tech Stack
+Add Books to Cart
 
-**Frontend:** React.js, Tailwind CSS, Axios
-**Backend:** Flask, SQLAlchemy, Flask-JWT-Extended, Flask-Migrate
-**Database:** PostgreSQL (Supabase)
-**ML Model:** Scikit-learn, Pandas, Cosine Similarity
-**Tools:** GitHub, Postman, JMeter, Render/Railway
+Rate & Review Books
 
----
+Reset Password using OTP
 
-## ⚙️ Installation
+Update Profile + Upload Profile Photo
 
-### Backend
+🛠 Admin Features
 
-```bash
+Add New Books
+
+Manage Dashboard
+
+Moderate Reviews
+
+🤖 AI / ML Features
+
+Collaborative Filtering using pivot table & similarity matrix
+
+Content-based fallback using author/genre
+
+Hybrid recommendation pipeline
+
+🏗 Tech Stack
+
+Frontend: React.js, Tailwind/Custom CSS
+Backend: Flask (Python), Flask-JWT, Flask-Migrate
+Database: PostgreSQL (Supabase)
+Authentication: JWT
+Storage: Supabase Storage
+Machine Learning: Pandas, NumPy, Pickle Models
+Tools: Postman, JMeter (Performance Testing)
+Version Control: GitHub
+
+📁 Folder Structure
+root/
+│── backend/
+│    ├── app.py
+│    ├── requirements.txt
+│    ├── migrations/
+│    ├── pivot.pkl
+│    ├── similarity_scores.pkl
+│    └── ...
+│
+│── frontend/
+│    ├── src/
+│    ├── public/
+│    ├── package.json
+│    └── ...
+│
+└── README.md
+
+⚙️ Backend Setup
+1️⃣ Create Virtual Environment
 cd backend
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
+
+2️⃣ Add .env File
+DATABASE_URL=postgresql+psycopg2://xxxxxxxx
+JWT_SECRET_KEY=your_secret
+SUPABASE_URL=https://xyz.supabase.co
+SUPABASE_KEY=service_role_or_anon_key
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+
+3️⃣ Run Migrations
+flask db init   # only first time
+flask db migrate -m "initial tables"
 flask db upgrade
-flask run
-```
 
-### Frontend
+4️⃣ Start Backend
+python app.py
 
-```bash
+🌐 Frontend Setup
 cd frontend
 npm install
 npm start
-```
 
----
+🔌 API Endpoints Overview
+Endpoint	Method	Description
+/register	POST	User Registration
+/login	POST	Login (JWT)
+/send-verification-otp	POST	OTP Email
+/verify-otp	POST	Verify OTP
+/search	GET	Search + Filter
+/rate	POST	Rate a Book
+/recommend	GET	Recommendation System
+/upload-profile-photo	POST	Profile Image Upload (Supabase)
+/admin/add-book	POST	Admin Add Book
+🖼 Screenshots
+⭐ Main Home Page
 
-## 📂 Folder Structure
+⭐ Admin Panel
 
-```
-next-read/
-├── backend/
-│   ├── app.py
-│   ├── models/
-│   ├── migrations/
-│   ├── tests/
-├── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-└── README.md
-```
+⭐ OTP Verification
 
----
+(Replace the image paths with your GitHub image URLs)
 
-## 🧪 Testing
+🧩 System Architecture Diagrams
+🔹 User Authentication Flow
 
-* PyTest for backend API endpoints
-* JMeter for performance/load testing
-* Validation tests for login, registration, and recommendations
+🔹 Recommendation Engine Flow
 
----
+🔹 Rating + OTP Verification Flow
 
-## 💡 Future Enhancements
+🔹 Frontend → Backend → Database Flow
 
-* Mobile app (React Native)
-* NLP-based advanced chatbot
-* Integration with Google Books/Goodreads APIs
-* Multi-language UI support
-* Personalized reading analytics
+🔹 User Access Diagram
 
----
+📊 Performance Testing (JMeter)
 
-## 👨‍💻 Contributors
+Load Testing Performed Using Apache JMeter:
 
-**Harsh Sorathiya – 2303031247016**
-**Manthan Shah – 2303031247028**
-**Dhruv Shah – 2303031247078**
-**Ovesh Khatri – 2303031247067**
+Concurrent 50/100/200 users
 
-**Project Guide:** *Asst. Professor Rahul Kumar Moud*
-Department of AI & DS, Parul University, Vadodara
+Monitored API response time, throughput
 
----
+Backend stable under load
 
-## 📚 References
+Login + Search API optimized with indexes
 
-* Scikit-learn Documentation
-* Flask SQLAlchemy Docs
-* React Official Docs
-* Supabase Documentation
-* Book Recommendation Dataset (Kaggle)
+🔮 Future Enhancements
 
----
+AI-powered NLP Review Analysis
 
-## 🏁 Conclusion
+Voice-based book search
 
-Next Read demonstrates how AI and modern web technologies can work together to deliver personalized book recommendations. This project successfully meets its objectives by integrating **machine learning**, **secure backend systems**, and a **user-friendly frontend interface**.
+User reading history + personalized dashboard
+
+Social sharing of book lists
+
+In-app recommendation analytics
+
+Auto-moderation for reviews
+
+🏁 Conclusion
+
+The Next Read successfully integrates AI, Web Technologies, and Cloud Infrastructure into a seamless recommendation platform.
+Its hybrid ML engine, modern UI, strong security, and scalable backend make it a robust system ready for real-world deployment.
