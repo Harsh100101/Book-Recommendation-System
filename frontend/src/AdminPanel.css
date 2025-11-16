@@ -1,0 +1,141 @@
+:root {
+	--bg-dark: #1b1d2a;
+	--card-bg: #232538;
+	--accent-color: #6366f1;
+	--text-light: #e5e7eb;
+	--success: #22c55e;
+	--error: #ef4444;
+}
+
+body {
+	background: var(--bg-dark);
+	color: var(--text-light);
+	font-family: "Poppins", sans-serif;
+}
+
+.admin-container {
+	min-height: 100vh;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+}
+
+.admin-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 900px;
+}
+
+.admin-header h1 {
+	font-size: 2rem;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+}
+
+.back-link {
+	color: var(--accent-color);
+	text-decoration: none;
+	font-weight: 500;
+	transition: 0.3s;
+}
+.back-link:hover {
+	text-decoration: underline;
+}
+
+.admin-card {
+	background: var(--card-bg);
+	box-shadow: 8px 8px 16px #12131d, -8px -8px 16px #2c2f45;
+	border-radius: 1.5rem;
+	padding: 2rem;
+	max-width: 900px;
+	width: 100%;
+}
+
+.admin-card h2 {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	font-size: 1.5rem;
+}
+
+.admin-form .form-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+}
+
+.admin-form input,
+.admin-form select {
+	background: var(--bg-dark);
+	color: var(--text-light);
+	border: none;
+	border-radius: 0.8rem;
+	padding: 0.8rem 1rem;
+	box-shadow: inset 3px 3px 6px #141622, inset -3px -3px 6px #2c2f45;
+	transition: all 0.3s ease;
+}
+.admin-form input:focus,
+.admin-form select:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.btn-submit {
+	grid-column: 1 / -1;
+	margin-top: 1.5rem;
+	padding: 0.9rem 1.5rem;
+	background: var(--accent-color);
+	border: none;
+	border-radius: 1rem;
+	color: white;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s;
+	box-shadow: 4px 4px 10px #181a29, -4px -4px 10px #2c2f45;
+}
+.btn-submit:hover {
+	transform: translateY(-2px);
+	background: #7a7cf7;
+}
+.btn-submit:active {
+	transform: scale(0.97);
+}
+
+.message {
+	margin-top: 1.5rem;
+	text-align: center;
+	font-weight: 500;
+}
+.message.success {
+	color: var(--success);
+}
+.message.error {
+	color: var(--error);
+}
+
+.book-preview {
+	margin-top: 2rem;
+	text-align: center;
+	background: var(--card-bg);
+	padding: 1.5rem;
+	border-radius: 1.5rem;
+	box-shadow: inset 3px 3px 6px #141622, inset -3px -3px 6px #2c2f45;
+}
+
+.book-image {
+	width: 130px;
+	height: 180px;
+	object-fit: cover;
+	border-radius: 10px;
+	margin-top: 1rem;
+	box-shadow: 2px 2px 6px #12131d, -2px -2px 6px #2c2f45;
+}
+
+.author {
+	color: #a1a1aa;
+	font-size: 0.9rem;
+	margin-top: 0.3rem;
+}

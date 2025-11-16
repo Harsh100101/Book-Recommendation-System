@@ -1,0 +1,127 @@
+/* ===== Verification Modal Styling ===== */
+
+.verification-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(8px); /* 🔥 blur effect */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+	animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.verification-modal {
+	background: rgba(25, 25, 25, 0.95);
+	color: #f1f1f1;
+	width: 400px;
+	max-width: 90%;
+	padding: 2rem 1.8rem;
+	border-radius: 16px;
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.5),
+		inset 0 0 10px rgba(255, 255, 255, 0.05);
+	text-align: center;
+	position: relative;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.verification-modal h2 {
+	color: #a8c7ff;
+	margin-bottom: 0.5rem;
+	font-size: 1.4rem;
+}
+
+.verification-modal p {
+	color: #ccc;
+	margin-bottom: 1.5rem;
+	font-size: 0.95rem;
+}
+
+/* Input Field */
+.otp-form input {
+	width: 100%;
+	padding: 10px;
+	border-radius: 8px;
+	border: none;
+	outline: none;
+	font-size: 1rem;
+	background-color: #1a1a1a;
+	color: #f1f1f1;
+	text-align: center;
+	letter-spacing: 2px;
+	margin-bottom: 1rem;
+	box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.6),
+		inset -2px -2px 6px rgba(255, 255, 255, 0.05);
+}
+
+/* Buttons */
+.send-otp-btn,
+.verify-btn {
+	width: 100%;
+	padding: 10px;
+	font-weight: 600;
+	font-size: 1rem;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.send-otp-btn {
+	background-color: #007bff;
+	color: white;
+}
+
+.send-otp-btn:hover {
+	background-color: #339cff;
+	transform: translateY(-2px);
+}
+
+.verify-btn {
+	background-color: transparent;
+	color: #a8c7ff;
+	border: 1px solid #a8c7ff;
+}
+
+.verify-btn:hover {
+	background-color: #a8c7ff;
+	color: #111;
+	transform: translateY(-2px);
+}
+
+.modal-message {
+	margin-top: 0.5rem;
+	font-size: 0.9rem;
+	color: #8ee68e;
+}
+
+/* Close Button */
+.close-modal {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	background: none;
+	border: none;
+	color: #aaa;
+	font-size: 1.5rem;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+	color: #fff;
+}

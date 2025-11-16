@@ -1,0 +1,1236 @@
+/* --- Global Styles & Fonts --- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+
+:root {
+	--primary-bg: #1a1a1a;
+	--secondary-bg: #282828;
+	--text-primary: #e0e0e0;
+	--text-secondary: #aaaaaa;
+	--accent-primary: #a0b3c8;
+	--border-color: #444444;
+}
+
+body {
+	margin: 0;
+	font-family: "Inter", sans-serif;
+	background-color: var(--primary-bg);
+	color: var(--text-primary);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* --- Header & Navigation --- */
+header {
+	background-color: #1a1a1a;
+	padding: 0.5rem 2rem;
+	display: flex; /* <-- ADD THIS */
+	align-items: center; /* <-- ADD THIS: Vertically centers items */
+	justify-content: space-between; /* <-- ADD THIS: Pushes nav to the right */
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+.main-title-text {
+	color: #e0e0e0; /* Or your preferred text color */
+	font-size: 1.8rem; /* Adjust as needed */
+	font-weight: bold;
+	margin-left: 15px; /* Space between logo and text */
+	margin-right: auto; /* Pushes other items to the right */
+}
+
+/* Ensure your existing header-logo-image style is there */
+.header-logo-image {
+	height: 100px; /* Adjust this height */
+	width: auto;
+	display: block; /* Ensure it behaves as a block element within flex */
+}
+
+/* The .logo-link might also need display: flex to wrap both */
+.logo-link {
+	display: flex;
+	align-items: center;
+	text-decoration: none; /* Remove underline if Link has one */
+	color: inherit; /* Inherit color from parent */
+}
+
+header h1 {
+	font-family: "Playfair Display", serif;
+	font-size: 1.8rem;
+	margin: 0;
+	color: var(--text-primary);
+}
+
+header nav {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.nav-link {
+	color: var(--text-secondary);
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+	color: var(--accent-primary);
+}
+
+.logout-button {
+	padding: 8px 15px;
+	background-color: var(--secondary-bg);
+	color: var(--text-primary);
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+
+.logout-button:hover {
+	background-color: var(--border-color);
+}
+
+/* --- Filter Controls --- */
+.filters {
+	display: grid;
+	grid-template-columns: 2fr 1fr 2fr;
+	gap: 20px;
+	padding: 20px;
+	background-color: var(--secondary-bg);
+	border-radius: 8px;
+	margin-bottom: 30px;
+	align-items: center;
+}
+
+.search-input,
+.genre-select {
+	padding: 12px;
+	border-radius: 5px;
+	border: 1px solid var(--border-color);
+	background-color: var(--primary-bg);
+	color: var(--text-primary);
+	font-size: 1rem;
+}
+
+.price-slider {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.price-slider label {
+	white-space: nowrap;
+	color: var(--text-secondary);
+}
+
+.price-slider input[type="range"] {
+	width: 100%;
+	cursor: pointer;
+}
+
+/* --- Main Content Layout --- */
+.main-content {
+	display: grid;
+	grid-template-columns: 2.5fr 1fr;
+	gap: 30px;
+}
+
+.book-list-container,
+.recommendation-container {
+	background-color: var(--secondary-bg);
+	border-radius: 8px;
+	padding: 25px;
+	height: fit-content;
+}
+
+h2 {
+	font-family: "Playfair Display", serif;
+	border-bottom: 1px solid var(--border-color);
+	padding-bottom: 15px;
+	margin-top: 0;
+	margin-bottom: 25px;
+	font-size: 1.5rem;
+}
+
+/* --- Book Search Grid --- */
+.book-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 25px;
+	max-height: 75vh;
+	overflow-y: auto;
+	padding-right: 15px;
+}
+
+.book-card {
+	background-color: var(--primary-bg);
+	border-radius: 8px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.book-card img {
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
+}
+
+.book-card .book-info {
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.book-card h4 {
+	font-size: 1rem;
+	margin: 0 0 5px 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: var(--text-primary);
+}
+
+.book-card p {
+	font-size: 0.85rem;
+	color: var(--text-secondary);
+	margin: 0;
+	flex-grow: 1;
+}
+
+.price-genre {
+	font-weight: 500;
+	color: var(--accent-primary) !important;
+	margin-top: 8px !important;
+}
+
+.average-rating {
+	font-size: 0.9rem;
+	font-weight: bold;
+	margin: 8px 0;
+	color: #ffc107;
+}
+
+.rating-count {
+	font-size: 0.8rem;
+	font-weight: normal;
+	color: var(--text-secondary);
+	margin-left: 8px;
+}
+
+/* --- CSS-Only Star Rating --- */
+.rating-stars {
+	display: inline-block;
+	unicode-bidi: bidi-override;
+	direction: rtl;
+	text-align: center;
+	margin-top: 8px;
+	padding: 5px 0;
+}
+.rating-stars input {
+	display: none;
+}
+.rating-stars label {
+	cursor: pointer;
+	color: var(--border-color);
+	transition: color 0.2s;
+	font-size: 1.5rem;
+	padding: 0 2px;
+}
+.rating-stars label:before {
+	content: "\2605";
+}
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+	color: #ffc107;
+}
+.rating-stars input:checked ~ label {
+	color: #ffc107;
+}
+
+/* --- Animated BUY NOW Button --- */
+.button {
+	display: flex;
+	margin-top: 10px;
+	border-radius: 5px;
+	overflow: hidden;
+}
+.box {
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 15px;
+	font-weight: 700;
+	color: #fff;
+	transition: all 0.4s;
+	cursor: pointer;
+	position: relative;
+	background: var(--accent-primary);
+	overflow: hidden;
+}
+.box:before {
+	content: "N";
+	position: absolute;
+	top: 0;
+	background: #0f0f0f;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translateY(100%);
+	transition: transform 0.4s;
+}
+.box:nth-child(2)::before {
+	transform: translateY(-100%);
+	content: "O";
+}
+.box:nth-child(3)::before {
+	content: "W";
+}
+.button:hover .box:before {
+	transform: translateY(0);
+}
+
+/* --- Recommendations Panel --- */
+.recommendation-container .placeholder-text {
+	text-align: center;
+	margin-top: 50px;
+	color: var(--text-secondary);
+}
+.rec-card {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	background-color: var(--primary-bg);
+	padding: 10px;
+	border-radius: 5px;
+}
+.rec-card img {
+	width: 50px;
+	height: 75px;
+	object-fit: cover;
+	border-radius: 4px;
+	margin-right: 15px;
+}
+.rec-info {
+	flex-grow: 1;
+}
+.rec-card h4 {
+	margin: 0 0 5px 0;
+	font-size: 0.9rem;
+}
+.rec-card p {
+	margin: 0;
+	font-size: 0.8rem;
+	color: var(--text-secondary);
+}
+.purchase-button.small {
+	padding: 5px 10px;
+	font-size: 0.8rem;
+	margin-top: 5px;
+	background-color: var(--accent-primary);
+	color: var(--primary-bg);
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+/* --- New Neumorphic Auth Form Styles --- */
+.auth-page-background {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: url("https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=2070&auto=format&fit=crop");
+	background-size: cover;
+	background-position: center;
+}
+
+/* --- THE NEW NEUMORPHIC CARD --- */
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px; /* Increased gap slightly */
+	padding: 2em;
+	width: 350px;
+	max-width: 90%;
+	background-color: var(--primary-bg); /* Use primary BG for the form body */
+	border-radius: 25px;
+	transition: 0.4s ease-in-out;
+	/* Added subtle hover effect on the entire form */
+	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.7);
+}
+.form:hover {
+	transform: scale(1.03); /* Slight zoom effect on hover */
+}
+
+#heading {
+	text-align: center;
+	margin: 1.5em 0; /* Slightly reduced margin */
+	color: var(--text-primary);
+	font-size: 1.5em;
+	font-family: "Playfair Display", serif;
+}
+
+/* Input Fields (The Neumorphic effect) */
+.field {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+	border-radius: 25px;
+	padding: 0.8em;
+	border: none;
+	outline: none;
+	color: var(--text-primary);
+	background-color: var(--primary-bg); /* Use primary BG for inner field */
+	/* Inset shadow for the 'pushed-in' Neumorphic look */
+	box-shadow: inset 3px 5px 10px rgba(0, 0, 0, 0.5),
+		inset -3px -5px 10px rgba(50, 50, 50, 0.2);
+}
+
+.input-icon {
+	height: 1.3em;
+	width: 1.3em;
+	fill: var(--accent-primary); /* Use the theme accent color for the icons */
+}
+
+.input-field {
+	background: none;
+	border: none;
+	outline: none;
+	width: 100%;
+	color: var(--text-primary);
+	font-size: 1rem;
+}
+
+.input-field::placeholder {
+	color: var(--text-secondary);
+}
+
+.form .btn {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	margin-top: 2.5em;
+}
+
+.button1,
+.button2 {
+	flex: 1;
+	padding: 0.8em;
+	border-radius: 8px;
+	border: none;
+	outline: none;
+	transition: 0.3s ease-in-out;
+	background-color: var(--secondary-bg); /* Darker secondary background */
+	color: var(--text-primary);
+	font-weight: bold;
+	cursor: pointer;
+	box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* Outer shadow for button */
+}
+
+.button1:hover,
+.button2:hover {
+	transform: scale(1.05);
+	background-color: var(--accent-primary);
+	color: var(--primary-bg);
+}
+
+.button3 {
+	/* Forgot Password */
+	margin-top: 1.5em;
+	padding: 0.5em;
+	border-radius: 5px;
+	background: none;
+	color: var(--text-secondary);
+	cursor: pointer;
+	transition: color 0.3s;
+	font-size: 0.9em;
+	border: none;
+}
+
+.button3:hover {
+	color: #ff6b6b; /* A red color for deletion/warning/forgot links */
+}
+/* --- MyRatings, Admin, and Cart Pages --- */
+.my-ratings-page,
+.admin-panel-page,
+.cart-page {
+	max-width: 1200px;
+	margin: 2rem auto;
+	padding: 20px;
+	background-color: rgba(40, 40, 40, 0.8);
+	backdrop-filter: blur(5px);
+	border-radius: 8px;
+}
+.ratings-header,
+.cart-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 30px;
+	padding-bottom: 20px;
+}
+.back-link {
+	color: var(--accent-primary);
+	text-decoration: none;
+	font-weight: bold;
+}
+.ratings-grid,
+.cart-grid {
+	display: grid;
+	gap: 25px;
+}
+.ratings-grid {
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.cart-grid {
+	grid-template-columns: repeat(5, 1fr);
+}
+.rated-book-card {
+	background-color: var(--primary-bg);
+	border-radius: 8px;
+	overflow: hidden;
+}
+.user-rating {
+	font-size: 1.1rem !important;
+	color: #ffc107 !important;
+	font-weight: bold;
+	margin-top: 10px !important;
+}
+
+/* --- Mini Cart Styles --- */
+.mini-cart-panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 380px;
+	height: 100vh;
+	background-color: var(--secondary-bg);
+	box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+	transform: translateX(100%);
+	transition: transform 0.4s ease-out;
+	z-index: 1100;
+	display: flex;
+	flex-direction: column;
+}
+.mini-cart-panel.open {
+	transform: translateX(0);
+}
+.close-btn {
+	background: none;
+	border: none;
+	color: var(--text-secondary);
+	font-size: 1.8rem;
+	cursor: pointer;
+	line-height: 1;
+	padding: 0;
+}
+.close-btn:hover {
+	color: var(--text-primary);
+}
+.mini-cart-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.5rem;
+	border-bottom: 1px solid var(--border-color);
+}
+.mini-cart-header h2 {
+	font-size: 1.5rem;
+	margin: 0;
+	color: var(--text-primary);
+}
+.close-btn {
+	background: none;
+	border: none;
+	color: var(--text-secondary);
+	font-size: 1.8rem;
+	cursor: pointer;
+}
+.mini-cart-items {
+	flex-grow: 1;
+	overflow-y: auto;
+	padding: 25px;
+}
+.mini-cart-item {
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	margin-bottom: 20px;
+	padding: 15px;
+	border-radius: 20px;
+	background: var(--primary-bg);
+	box-shadow: 5px 5px 10px #111, -5px -5px 10px #252525;
+	height: 120px;
+	box-sizing: border-box;
+}
+.mini-cart-item-image {
+	width: 80px;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 10px;
+	flex-shrink: 0;
+}
+.mini-cart-item-details {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	overflow: hidden;
+}
+.mini-cart-item-details h4 {
+	margin: 0 0 5px 0;
+	font-size: 1rem;
+	color: var(--text-primary);
+	white-space: normal;
+}
+.mini-cart-item-details p {
+	margin: 0;
+	font-size: 0.9rem;
+	color: var(--accent-primary);
+	font-weight: 500;
+}
+.remove-btn {
+	background: none;
+	border: none;
+	color: var(--text-secondary);
+	font-size: 1.5rem;
+	font-weight: bold;
+	cursor: pointer;
+	margin-left: auto;
+	padding: 0 5px;
+	line-height: 1;
+	transition: color 0.2s;
+}
+.remove-btn:hover {
+	color: #ff6b6b;
+}
+.mini-cart-summary {
+	padding: 1.5rem;
+	border-top: 1px solid var(--border-color);
+}
+.subtotal {
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+}
+.mini-cart-actions .primary-button {
+	width: 100%;
+	padding: 1rem;
+	border: none;
+	border-radius: 5px;
+	font-size: 1.1rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	background-color: var(--accent-primary);
+	color: var(--primary-bg);
+}
+/* --- Custom Gradient Background (New!) --- */
+.custom-gradient-bg {
+	width: 100vw;
+	height: 100vh; /* Make sure it covers the full viewport */
+	--s: 200px; /* control the size */
+	--c1: #1d1d1d;
+	--c2: #4e4f51;
+	--c3: #3c3c3c;
+
+	background: repeating-conic-gradient(
+				from 30deg,
+				#0000 0 120deg,
+				var(--c3) 0 180deg
+			)
+			calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+		repeating-conic-gradient(
+			from 30deg,
+			var(--c1) 0 60deg,
+			var(--c2) 0 120deg,
+			var(--c3) 0 180deg
+		);
+	background-size: var(--s) calc(var(--s) * 0.577);
+	position: fixed; /* Fix the background to the viewport */
+	top: 0;
+	left: 0;
+	z-index: -1; /* Ensure it stays behind other content */
+}
+
+/* --- Profile Card Styles --- */
+.profile-card {
+	display: flex;
+	justify-content: center;
+	padding: 40px 0;
+	width: 100%;
+	position: relative; /* Needed for z-index context if you have other elements */
+	z-index: 0; /* Ensure card is above the background */
+	min-height: calc(100vh - 80px); /* Adjust based on header/footer height */
+}
+
+.profile-card .card {
+	width: 380px; /* Increased size for better content visibility */
+	height: auto; /* Allow height to adjust based on content */
+	background: var(--secondary-bg);
+	box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.4);
+	border-radius: 15px;
+	overflow: hidden;
+	color: var(--text-primary);
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 20px;
+	margin-top: 50px; /* Adjust to move card down from header */
+}
+
+.imge {
+	height: 120px; /* Slightly taller to fit text comfortably */
+	background-color: #ff5858; /* Accent color for the header band */
+	padding: 10px 15px;
+	position: relative;
+	display: flex; /* Use flexbox for internal alignment */
+	align-items: center; /* Vertically align items */
+	margin-bottom: 30px; /* Space before the next section */
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.imge .Usericon {
+	background-color: var(--border-color);
+	width: 70px; /* Slightly larger icon */
+	height: 70px;
+	border-radius: 50%;
+	position: relative; /* No longer absolute, let flexbox handle it */
+	border: 3px solid var(--secondary-bg);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	flex-shrink: 0; /* Prevent icon from shrinking */
+	margin-right: 15px; /* Space between icon and text */
+}
+
+.imge .UserName {
+	color: white; /* Make username stand out */
+	font-size: 1.5rem; /* Larger font size */
+	font-weight: bold;
+	margin: 0;
+	line-height: 1.2; /* Tighter line height */
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Add text shadow for readability */
+}
+
+.imge .UserStats {
+	/* NEW STYLE for review count */
+	color: var(--text-primary); /* Use a subtle color */
+	font-size: 0.9rem;
+	margin: 0;
+	margin-top: 5px; /* Space below username */
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.Description {
+	padding: 0 20px; /* More padding for content */
+	flex-grow: 1;
+	text-align: left;
+	margin-bottom: 20px; /* Space before password section */
+}
+
+.Description p {
+	color: var(--text-secondary);
+	font-size: 0.95rem;
+	margin: 8px 0; /* Slightly more vertical spacing */
+}
+
+.Description strong {
+	color: var(--text-primary);
+}
+
+/* Password Update Section */
+.password-update-section {
+	padding: 20px;
+	border-top: 1px solid var(--border-color);
+	margin-top: 20px;
+}
+
+.password-update-section h2 {
+	color: var(--accent-primary);
+	font-size: 1.2rem;
+	margin-bottom: 15px;
+}
+
+.password-update-section .form-group {
+	margin-bottom: 15px;
+}
+
+.password-update-section .input-field {
+	width: 100%;
+	padding: 10px 15px;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	background-color: var(--background-color);
+	color: var(--text-primary);
+	font-size: 1rem;
+}
+
+.password-update-section .input-field:focus {
+	outline: none;
+	border-color: var(--accent-primary);
+	box-shadow: 0 0 0 3px rgba(255, 88, 88, 0.3);
+}
+
+.password-update-section .submit-button {
+	width: 100%;
+	padding: 12px;
+	background-color: var(--accent-primary);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1.1rem;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.password-update-section .submit-button:hover {
+	background-color: #e54c4c;
+}
+
+.auth-message {
+	margin-top: 15px;
+	font-size: 0.9rem;
+	color: var(--text-secondary); /* Adjust color based on success/error */
+	text-align: center;
+}
+
+.social-media {
+	padding: 15px;
+	text-align: center;
+	border-top: 1px solid var(--border-color);
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: auto; /* Pushes social media to the bottom */
+}
+
+.social-media a svg {
+	width: 20px;
+	height: 20px;
+	fill: var(--text-secondary); /* More subtle default color */
+	transition: fill 0.2s ease;
+}
+
+.social-media a svg:hover {
+	fill: var(--accent-primary); /* Changes to accent color on hover */
+}
+
+/* Ensure the background covers the whole page for mobile too */
+@media (max-width: 768px) {
+	.custom-gradient-bg {
+		background-size: var(--s) calc(var(--s) * 0.577); /* Maintain pattern on mobile */
+	}
+	.profile-card .card {
+		width: 90%; /* Make card take up more width on smaller screens */
+		margin-top: 30px;
+	}
+	.imge {
+		height: 100px;
+	}
+	.imge .Usericon {
+		width: 60px;
+		height: 60px;
+		bottom: -25px;
+	}
+	.imge .UserName {
+		font-size: 1.3rem;
+	}
+	.imge .UserStats {
+		font-size: 0.8rem;
+	}
+}
+/* --- UPDATED PROFILE LAYOUT STYLES --- */
+/* --- Profile Page New Styles --- */
+.profile-page-wrapper {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: linear-gradient(135deg, #141414 0%, #1f1f1f 100%);
+	padding: 2rem;
+	color: #e0e0e0;
+	font-family: "Inter", sans-serif;
+}
+
+.profile-header {
+	width: 100%;
+	max-width: 900px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+
+.profile-header h1 {
+	font-size: 1.8rem;
+	font-family: "Playfair Display", serif;
+}
+
+.back-btn {
+	color: #a0b3c8;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.profile-card-upgraded {
+	width: 100%;
+	max-width: 900px;
+	background: rgba(30, 30, 30, 0.8);
+	border-radius: 20px;
+	padding: 2rem;
+	box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.6),
+		-5px -5px 15px rgba(80, 80, 80, 0.2);
+	backdrop-filter: blur(10px);
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 2rem;
+	align-items: center;
+}
+
+.profile-photo-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+.photo-wrapper {
+	position: relative;
+	border-radius: 50%;
+	overflow: hidden;
+	box-shadow: 0 0 15px rgba(160, 179, 200, 0.3);
+	transition: 0.3s;
+}
+
+.photo-wrapper:hover {
+	transform: scale(1.05);
+	box-shadow: 0 0 20px rgba(160, 179, 200, 0.6);
+}
+
+.profile-photo {
+	width: 160px;
+	height: 160px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.upload-label {
+	margin-top: 0.5rem;
+	background: #a0b3c8;
+	color: #111;
+	padding: 0.5rem 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 600;
+	transition: background 0.3s;
+}
+.upload-label:hover {
+	background: #ccd7e1;
+}
+
+.upload-progress-bar {
+	width: 100%;
+	background: #333;
+	height: 6px;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.upload-progress {
+	height: 6px;
+	background: #a0b3c8;
+	width: 0%;
+	transition: width 0.3s ease;
+}
+
+.upload-status {
+	font-size: 0.9rem;
+	color: #aaa;
+	text-align: center;
+}
+
+.profile-info {
+	text-align: left;
+}
+
+.profile-info h2 {
+	font-size: 1.5rem;
+	margin: 0 0 0.3rem 0;
+}
+
+.profile-email {
+	color: #a0a0a0;
+	margin-bottom: 1rem;
+}
+
+.status-tags {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 1rem;
+}
+
+.status-badge,
+.role-badge {
+	padding: 5px 12px;
+	border-radius: 15px;
+	font-weight: 600;
+	font-size: 0.85rem;
+	text-transform: uppercase;
+}
+
+.status-badge.verified {
+	background: #3cb37133;
+	color: #3cb371;
+}
+.status-badge.pending {
+	background: #b33c3c33;
+	color: #ff6961;
+}
+.role-badge.admin {
+	background: #a0b3c833;
+	color: #a0b3c8;
+}
+.role-badge.user {
+	background: #444;
+	color: #ccc;
+}
+
+.password-card {
+	margin-top: 2rem;
+	background: rgba(25, 25, 25, 0.7);
+	padding: 1.5rem;
+	border-radius: 15px;
+	box-shadow: inset 4px 4px 8px #111, inset -4px -4px 8px #222;
+}
+
+.password-card h3 {
+	margin-bottom: 1rem;
+	font-size: 1.2rem;
+	color: #a0b3c8;
+}
+
+.password-input {
+	width: 100%;
+	padding: 0.8rem;
+	border: none;
+	border-radius: 10px;
+	margin-bottom: 1rem;
+	background: #1a1a1a;
+	color: #e0e0e0;
+	box-shadow: inset 3px 3px 8px #111, inset -3px -3px 8px #222;
+}
+
+.password-btn {
+	width: 100%;
+	padding: 0.8rem;
+	background: #a0b3c8;
+	color: #111;
+	border: none;
+	border-radius: 10px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: 0.3s;
+}
+.password-btn:hover {
+	background: #c6d5e4;
+}
+
+@media (max-width: 768px) {
+	.profile-card-upgraded {
+		grid-template-columns: 1fr;
+		text-align: center;
+	}
+}
+
+/* 1. Header Band and Photo Container */
+.imge {
+	height: 140px; /* Taller band to fit the full photo container */
+	background-color: #ff5858; /* Accent color for the header band */
+	padding: 10px 15px;
+	position: relative;
+	margin-bottom: 30px;
+	display: flex;
+	justify-content: center; /* Center the whole photo container */
+	align-items: flex-end; /* Align the content to the bottom of the band */
+}
+
+.UserPhotoContainer {
+	position: absolute;
+	top: 50%; /* Start the photo in the middle of the band */
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	overflow: hidden;
+	border: 4px solid var(--secondary-bg); /* Border color matching the card body */
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+	z-index: 10;
+}
+
+.UserPhoto {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* 2. Upload Button (Overlay) */
+.upload-label {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	color: var(--text-primary);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	opacity: 0; /* Hidden by default */
+	transition: opacity 0.3s ease;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.UserPhotoContainer:hover .upload-label {
+	opacity: 1; /* Appears on hover */
+}
+
+/* 3. Text Alignment */
+.UserName,
+.UserStats {
+	/* Resetting the styles so they don't fight with the UserPhotoContainer */
+	text-align: center;
+	margin: 0;
+	padding-top: 50px; /* Adjust padding to clear the photo */
+}
+
+.UserStats {
+	margin-bottom: 20px;
+}
+/*
+ * RESPONSIVE WEB DESIGN SECTION
+ * This section should be added at the VERY END of your App.css file.
+ */
+
+/* --- Default Layout (Desktop/Laptop) --- */
+.main-content {
+	display: grid;
+	grid-template-columns: 2.5fr 1fr; /* Two columns: Search/List and Recommendations */
+	gap: 30px;
+}
+
+/* --- Mobile and Tablet Adjustments --- */
+
+/* 1. Tablet View (Screens up to 1024px) */
+@media (max-width: 1024px) {
+	/* Collapse the two main panels (Search and Recs) into a single column */
+	.main-content {
+		grid-template-columns: 1fr;
+		gap: 40px;
+	}
+
+	/* Filters: Stack the price slider below the search/genre fields */
+	.filters {
+		grid-template-columns: 1fr 1fr; /* Two columns instead of three */
+		gap: 15px;
+	}
+	.price-slider {
+		grid-column: 1 / -1; /* Make the price slider span the full width */
+	}
+
+	/* Book Grid: Fewer columns on wider screens */
+	.book-grid {
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		/* The width of the card is 180px, so this will naturally create 4-5 columns */
+	}
+
+	/* Hide the mini-cart functionality on this view, as it's not mobile-friendly */
+	.mini-cart-panel {
+		width: 100%;
+	}
+}
+
+/* 2. Phone View (Screens up to 600px) */
+@media (max-width: 600px) {
+	.App {
+		padding: 10px;
+	}
+
+	/* Header: Stack the navigation links vertically */
+	header {
+		flex-direction: column;
+		text-align: center;
+		padding: 1rem 0.5rem;
+	}
+
+	header nav {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 10px;
+		gap: 10px;
+	}
+
+	/* Filters: Stack all elements vertically */
+	.filters {
+		grid-template-columns: 1fr;
+	}
+
+	/* Book Grid: 2 columns max on tiny screens */
+	.book-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 15px;
+		padding-right: 5px;
+		/* Force image to be slightly smaller to fit 2 per row */
+		height: 60vh;
+	}
+
+	.book-card img {
+		height: 180px;
+	}
+
+	/* Auth Page: Ensure the form is not too wide */
+	.form-container {
+		width: 95%;
+		margin: 1rem;
+	}
+}
+
+.verify-email-button {
+	padding: 10px 18px;
+	border: none;
+	border-radius: 8px;
+	background-color: #ff5757;
+	color: white;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	transition: all 0.3s ease;
+}
+
+.verify-email-button:hover {
+	background-color: #ff7676;
+	transform: translateY(-2px);
+}
